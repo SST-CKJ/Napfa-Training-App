@@ -21,7 +21,7 @@ struct Goal_Page: View {
     @State private var Nil = [false, false,  false, false, false, false]
     @State private var Goals: [[String]] = []
     @State private var age = 12
-    
+    @State private var Days = ["Monday","Tuesday","Wenesday","Thursday","Friday","Saturday","Sunday"]
     var body: some View {
         NavigationStack{
             ScrollView{
@@ -171,6 +171,18 @@ struct Goal_Page: View {
                     .offset(y: -140)
                 }
                 
+                
+                Text("SCHEDULE")
+                    .font(.system(size: 20))
+                    .foregroundStyle(.gray)
+                    .offset(x: -110)
+                    .offset(y: -110)
+                
+                HStack(spacing: 20){
+                    ForEach(Days.indices, id: \.self){day in  Text(String(Days[day]).prefix(1))
+                            .font(.system(size: 40))
+                        .offset(y: -100)}
+                }
                 Button{
                     info.Gender = Sex
                     info.target = targ
