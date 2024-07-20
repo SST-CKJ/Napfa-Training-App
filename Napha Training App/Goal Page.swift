@@ -178,10 +178,17 @@ struct Goal_Page: View {
                     .offset(x: -110)
                     .offset(y: -110)
                 
-                HStack(spacing: 20){
+                HStack(spacing: 15){
                     ForEach(Days.indices, id: \.self){day in  Text(String(Days[day]).prefix(1))
-                            .font(.system(size: 40))
-                        .offset(y: -100)}
+                            .font(.system(size: 20))
+                        
+                            .frame(width: 35, height: 35)
+                            .background(Circle().fill(Color.cyan))
+                        }
+                        .bold()
+                        .offset(y: -90)
+                        
+                        
                 }
                 Button{
                     info.Gender = Sex
@@ -200,7 +207,7 @@ struct Goal_Page: View {
                             .foregroundStyle(.white)
                     }
                 }
-                .offset(y: -120)
+                .offset(y: -100)
             }
         }
     }
