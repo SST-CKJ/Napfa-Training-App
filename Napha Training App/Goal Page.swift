@@ -24,6 +24,7 @@ struct Goal_Page: View {
     @State private var Days = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
     @State private var selectedDays: Set<Int> = []
     @State private var toThrow: String = ""
+    @State private var selectedTimes : [Date] =  Array(repeating: Date(), count: 7)
     var body: some View {
         NavigationStack{
             ScrollView{
@@ -216,12 +217,12 @@ struct Goal_Page: View {
                                 .offset(x: 50)
                                 .font(.system(size: 25))
                                 .frame(width: 50, alignment: .leading)
-                            TextField("00:00", text: $toThrow)
-                                .offset(x: 70)
-                                .font(.system(size: 30))
-                            TextField("00:00", text: $toThrow)
-                                .offset(x:40)
-                                .font(.system(size: 30))
+                            DatePicker(Days[selectedDay].prefix(3), selection: $selectedTimes[selectedDay]
+                                       , displayedComponents: .hourAndMinute)
+                                .labelsHidden()
+                            
+                            
+                          
                         }
                         
                     }
