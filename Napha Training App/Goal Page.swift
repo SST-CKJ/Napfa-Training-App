@@ -22,6 +22,7 @@ struct Goal_Page: View {
     @State private var Goals: [[String]] = []
     @State private var age = 12
     @State private var Days = ["Monday","Tuesday","Wenesday","Thursday","Friday","Saturday","Sunday"]
+    @State private var selectedDays: Set<Int> = []
     var body: some View {
         NavigationStack{
             ScrollView{
@@ -181,15 +182,25 @@ struct Goal_Page: View {
                 HStack(spacing: 15){
                     ForEach(Days.indices, id: \.self){day in  Text(String(Days[day]).prefix(1))
                             .font(.system(size: 20))
-                        
+                            .foregroundColor(.white)
                             .frame(width: 35, height: 35)
-                            .background(Circle().fill(Color.cyan))
-                        }
-                        .bold()
+                            .background(Circle().fill(selectedDays.contains(day) ? Color.blue : Color.gray)
+                                .animation(.easeInOut(duration: 0.3), value: selectedDays))
+                            .onTapGesture {
+                                withAnimation(.easeInOut(duration: 0.3)){
+                                    if selectedDays.contains(day){
+                                        selectedDays.remove(day)
+                                    } else {
+                                        selectedDays.insert(day)
+                                    }
+                                }
+                            }
+                    }                                           .bold()
                         .offset(y: -90)
                         
                         
                 }
+
                 Button{
                     info.Gender = Sex
                     info.target = targ
