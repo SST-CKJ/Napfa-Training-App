@@ -21,8 +21,9 @@ struct Goal_Page: View {
     @State private var Nil = [false, false,  false, false, false, false]
     @State private var Goals: [[String]] = []
     @State private var age = 12
-    @State private var Days = ["Monday","Tuesday","Wenesday","Thursday","Friday","Saturday","Sunday"]
+    @State private var Days = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
     @State private var selectedDays: Set<Int> = []
+    @State private var toThrow: String = ""
     var body: some View {
         NavigationStack{
             ScrollView{
@@ -192,6 +193,7 @@ struct Goal_Page: View {
                                         selectedDays.remove(day)
                                     } else {
                                         selectedDays.insert(day)
+                                        
                                     }
                                 }
                             }
@@ -199,6 +201,30 @@ struct Goal_Page: View {
                         .offset(y: -90)
                         
                         
+                }
+                Text("TIMING")
+                    .font(.system(size: 20))
+                    .foregroundStyle(.gray)
+                    .offset(x: -130)
+                    .offset(y: -60)
+                VStack(spacing: 30){
+                    
+                    ForEach(Array(selectedDays).sorted(), id:
+                                \.self){selectedDay in
+                        HStack(alignment: .center){
+                            Text(Days[selectedDay].prefix(3))
+                                .offset(x: 50)
+                                .font(.system(size: 25))
+                                .frame(width: 50, alignment: .leading)
+                            TextField("00:00", text: $toThrow)
+                                .offset(x: 70)
+                                .font(.system(size: 30))
+                            TextField("00:00", text: $toThrow)
+                                .offset(x:40)
+                                .font(.system(size: 30))
+                        }
+                        
+                    }
                 }
 
                 Button{
@@ -218,7 +244,7 @@ struct Goal_Page: View {
                             .foregroundStyle(.white)
                     }
                 }
-                .offset(y: -100)
+                .offset(y: 0)
             }
         }
     }
