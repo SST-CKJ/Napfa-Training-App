@@ -229,6 +229,10 @@ struct Goal_Page: View {
                     Text(dateFormatter.string(from: i))
                     //used for testing, remove later
                 }
+                ForEach(selectedDays, id: \.self){i in
+                    Text((String(i+1)))
+                    
+                }
                 Text("TIMING")
                     .font(.system(size: 20))
                     .foregroundStyle(.gray)
