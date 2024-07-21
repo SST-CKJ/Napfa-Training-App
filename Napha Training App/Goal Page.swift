@@ -22,9 +22,20 @@ struct Goal_Page: View {
     @State private var Goals: [[String]] = []
     @State private var age = 12
     @State private var Days = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
-    @State private var selectedDays: Set<Int> = []
+    @State private var selectedDays: [Int] = []
     @State private var toThrow: String = ""
-    @State private var selectedTimes : [Date] =  Array(repeating: Date(), count: 7)
+    @State private var times : [Date] =  Array(repeating: Date(), count: 7)
+    @State private var selectedTimes : [Date] = []
+    @State private var numberArray = [1,2,3,4,5,6,7]
+    @State private var selectedTime = Date()
+    @State private var selectedTimeInt: Int = 0
+    @State private var selectedTimeOptional: Int? = 0
+    let dateFormatter: DateFormatter = {
+            let formatter = DateFormatter()
+            formatter.dateStyle = .medium // Choose a date style (e.g., .short, .medium, .long)
+            formatter.timeStyle = .short // Choose a time style (e.g., .none, .short, .medium, .long)
+            return formatter
+        }()
     var body: some View {
         NavigationStack{
             ScrollView{
@@ -191,17 +202,32 @@ struct Goal_Page: View {
                             .onTapGesture {
                                 withAnimation(.easeInOut(duration: 0.3)){
                                     if selectedDays.contains(day){
-                                        selectedDays.remove(day)
+                                        selectedTimes.remove(at: selectedDays.firstIndex(of: day)!)
+                                        selectedDays.removeAll {$0 == day}
+                                        
                                     } else {
-                                        selectedDays.insert(day)
+                                        selectedDays.append(day)
+                                       /* selectedTime = times[Int((Array(selectedDays).firstIndex(where: {$0 == day})))-1]
+                                        selectedTimeInt = Int(Array(selectedDays).firstIndex(where: {$0 == day}))
+                                        selectedTimeOptional = (Array(selectedDays)).firstIndex(where: {$0 == day})+1
+                                        selectedTimeInt = Int(selectedTimeOptional!)
+                                        selectedTimes.append( times[selectedTimeInt])*/
+                                        /*selectedTimeInt = Int(Array(times).firstIndex(of: day))*/
+                                       /* selectedTimes(Int(times.firstIndex(of: day)))*/
+                                        selectedTimes.append(times[day])
                                         
                                     }
                                 }
                             }
+                            
                     }                                           .bold()
                         .offset(y: -90)
                         
                         
+                }
+                ForEach(selectedTimes, id: \.self){ i in
+                    Text(dateFormatter.string(from: i))
+                    //used for testing, remove later
                 }
                 Text("TIMING")
                     .font(.system(size: 20))
@@ -210,19 +236,25 @@ struct Goal_Page: View {
                     .offset(y: -60)
                 VStack(spacing: 30){
                     
-                    ForEach(Array(selectedDays).sorted(), id:
-                                \.self){selectedDay in
+                    ForEach(selectedDays.sorted(), id:
+                        \.self){selectedDay in
                         HStack(alignment: .center){
                             Text(Days[selectedDay].prefix(3))
-                                .offset(x: 50)
+                                .offset(x: -90)
                                 .font(.system(size: 25))
                                 .frame(width: 50, alignment: .leading)
-                            DatePicker(Days[selectedDay].prefix(3), selection: $selectedTimes[selectedDay]
+                            DatePicker(Days[selectedDay].prefix(3), selection: $times[selectedDay]
                                        , displayedComponents: .hourAndMinute)
                                 .labelsHidden()
+                                .onChange(of: times[selectedDay]){ if selectedDays.contains(selectedDay){
+                                    selectedTimes.remove(at: selectedDays.firstIndex(of: selectedDay)!)
+                                    selectedDays.removeAll {$0 == selectedDay}
+                                    selectedDays.append(selectedDay)
+                                    selectedTimes.append(times[selectedDay])
+                                }
+                                    
+                                }
                             
-                            
-                          
                         }
                         
                     }
@@ -234,14 +266,15 @@ struct Goal_Page: View {
                     info.prev = prev
                     info.Goals = Goals
                     info.Age = age
-                    
                     dismiss()
+                
+                    
                 } label: {
                     ZStack{
                         RoundedRectangle(cornerRadius: 20)
                             .fill(Color(.green))
                             .frame(width: 70, height: 50)
-                        Text("Done")
+                        Text("Save")
                             .foregroundStyle(.white)
                     }
                 }
