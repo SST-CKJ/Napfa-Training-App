@@ -25,11 +25,12 @@ struct Goal_Page: View {
     @State private var selectedDays: [Int] = []
     @State private var toThrow: String = ""
     @State private var times : [Date] =  Array(repeating: Date(), count: 7)
-    @State private var selectedTimes : [Date] = []
+    @State private var selectedTimed : [Date] = []
+    
     @State private var numberArray = [1,2,3,4,5,6,7]
     @State private var selectedTime = Date()
-    @State private var selectedTimeInt: Int = 0
-    @State private var selectedTimeOptional: Int? = 0
+   
+    @Binding var selectedTimes: [Date]
     let dateFormatter: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateStyle = .medium // Choose a date style (e.g., .short, .medium, .long)
@@ -289,5 +290,5 @@ struct Goal_Page: View {
 }
 
 #Preview {
-    Goal_Page(info: .constant(data(Age: 0, Gender: false, prev: [], target: [], schedule: [], NAPHA_Date: Date.now, Goals: [])))
+    Goal_Page(info: .constant(data(Age: 0, Gender: false, prev: [], target: [], schedule: [], NAPHA_Date: Date.now, Goals: [])), selectedTimes: .constant([]))
 }

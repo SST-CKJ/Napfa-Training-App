@@ -12,10 +12,20 @@ struct Home: View {
     @Binding var info: data
     @State private var exercises = ["Sit Ups", "Standing Broad Jump", "Sit & Reach", "Inclined Pull Ups", "Shuttle Run", "2.4km Run"]
     @State private var Goalindx = 0
-    
+    @Binding var homeSelectedTimed: [Date]
+    let dateFormatter: DateFormatter = {
+            let formatter = DateFormatter()
+            formatter.dateStyle = .medium // Choose a date style (e.g., .short, .medium, .long)
+            formatter.timeStyle = .short // Choose a time style (e.g., .none, .short, .medium, .long)
+            return formatter
+        }()
     var body: some View {
         NavigationStack{
             VStack{
+                ForEach(homeSelectedTimed, id: \.self){ i in
+                    Text(dateFormatter.string(from: i))
+                    //used for testing, remove later
+                }                
                 Text("NAPFA EXAMINATION IN")
                     .font(.system(size: 20))
                     .bold()
@@ -87,5 +97,5 @@ struct Home: View {
 }
 
 #Preview {
-    Home(info: .constant(data(Age: 0, Gender: false, prev: [], target: [], schedule: [], NAPHA_Date: Date.now, Goals: [])))
+    Home(info: .constant(data(Age: 0, Gender: false, prev: [], target: [], schedule: [], NAPHA_Date: Date.now, Goals: [])), homeSelectedTimed: .constant([]))
 }

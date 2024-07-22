@@ -11,6 +11,7 @@ struct Settings: View {
     
     @Binding var info: data
     @State var GoalSheet = false
+    @Binding var selectedTimedSettings: [Date]
     
     var body: some View {
         Button{
@@ -19,11 +20,11 @@ struct Settings: View {
             Label("Goal Setting", systemImage: "target")
         }
         .sheet(isPresented: $GoalSheet){
-            Goal_Page(info: $info)
+            Goal_Page(info: $info, selectedTimes: $selectedTimedSettings)
         }
     }
 }
 
 #Preview {
-    Settings(info: .constant(data(Age: 0, Gender: false, prev: [], target: [], schedule: [], NAPHA_Date: Date.now, Goals: [])))
+    Settings(info: .constant(data(Age: 0, Gender: false, prev: [], target: [], schedule: [], NAPHA_Date: Date.now, Goals: [])), selectedTimedSettings: .constant([]))
 }

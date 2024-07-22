@@ -18,7 +18,6 @@
 		77BA9C1C2C29673A0045BA5B /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77BA9C1B2C29673A0045BA5B /* Home.swift */; };
 		77BA9C1E2C296A960045BA5B /* Goal Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77BA9C1D2C296A960045BA5B /* Goal Page.swift */; };
 		77BFA61A2C36E8830072B92E /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77BFA6192C36E8830072B92E /* Settings.swift */; };
-		77CACA892C451531000597B7 /* Workout Modifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77CACA882C451531000597B7 /* Workout Modifier.swift */; };
 		77DA52872C296F380021EC9A /* SwiftPersistence in Frameworks */ = {isa = PBXBuildFile; productRef = 77DA52862C296F380021EC9A /* SwiftPersistence */; };
 /* End PBXBuildFile section */
 
@@ -54,7 +53,6 @@
 		77BA9C1B2C29673A0045BA5B /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
 		77BA9C1D2C296A960045BA5B /* Goal Page.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Goal Page.swift"; sourceTree = "<group>"; };
 		77BFA6192C36E8830072B92E /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
-		77CACA882C451531000597B7 /* Workout Modifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Workout Modifier.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,7 +104,6 @@
 		7705B7322C00621500111DBE /* Napha Training App */ = {
 			isa = PBXGroup;
 			children = (
-				77CACA882C451531000597B7 /* Workout Modifier.swift */,
 				7705B7332C00621500111DBE /* Napha_Training_AppApp.swift */,
 				77BA9C1B2C29673A0045BA5B /* Home.swift */,
 				77BA9C1D2C296A960045BA5B /* Goal Page.swift */,
@@ -280,7 +277,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				77CACA892C451531000597B7 /* Workout Modifier.swift in Sources */,
 				77BFA61A2C36E8830072B92E /* Settings.swift in Sources */,
 				77BA9C1E2C296A960045BA5B /* Goal Page.swift in Sources */,
 				77BA9C1A2C29670B0045BA5B /* Login.swift in Sources */,
