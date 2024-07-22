@@ -16,6 +16,7 @@ struct Home: View {
     var body: some View {
         NavigationStack{
             VStack{
+                Text("Hello Gideon")
                 Text("NAPFA EXAMINATION IN")
                     .font(.system(size: 20))
                     .bold()
