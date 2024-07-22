@@ -178,7 +178,7 @@ struct Goal_Page: View {
                     .offset(y: -140)
                     
                     Button{
-                        Goals.append(["", ""])
+                        Goals.append(["", "Situps"])
                     } label: {
                         Text("Create New Goal")
                     }

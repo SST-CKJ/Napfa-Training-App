@@ -66,7 +66,7 @@ struct Home: View {
                             .offset(y: 56)
                         
                         Text(info.Goals == [] ? "You dont have any goals yet.\nGo to Settings > Goal Page\nto set some!" :"I will get\n\(info.Goals[Goalindx][0])\nfor \(info.Goals[Goalindx][1])")
-                            .font(.system(size: info.Goals == [] ? 20 : 30))
+                            .font(.system(size: info.Goals == [] ? 20 : 20))
                             .foregroundStyle(.white)
                             .offset(y: 50)
                     }
