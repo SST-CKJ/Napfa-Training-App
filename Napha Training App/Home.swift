@@ -45,11 +45,13 @@ struct Home: View {
             formatter.timeStyle = .short // Choose a time style (e.g., .none, .short, .medium, .long)
             return formatter
         }()
-    
+    @State var zippedTimeDay: [(Int,Date)] = []
+    @State var sortedDays: [Int] = []
+    @State var sortedTimes: [Date] = []
     var body: some View {
         NavigationStack{
             VStack{
-                ForEach(homeSelectedTimed, id: \.self){ i in
+                ForEach(sortedTimes, id: \.self){ i in
                     Text(dateFormatter.string(from: i))
                     //used for testing, remove later
                 }                
@@ -121,18 +123,21 @@ struct Home: View {
             }
         }
         .onAppear{
-            daySelected = false
+            /*daySelected = false
             for i in homeSelectedDays{
                 if daySelected == false {
                     if Int(Calendar.current.weekdaySymbols[DayIndex]) == Int(i) {
                         selectedDayComponent =  homeSelectedTimed[homeSelectedDays.firstIndex(of: Int(i))!]
                         
                                             }
-                }
+                }*/
+            zippedTimeDay = zip(homeSelectedDays,homeSelectedTimed).sorted{ $0.0 < $1.0}
+            sortedDays = zippedTimeDay.map { $0.0 }
+            sortedTimes = zippedTimeDay.map { $0.1 }
             }
         }
     }
-}
+
 
 #Preview {
     Home(info: .constant(data(Age: 0, Gender: false, prev: [], target: [], schedule: [], NAPHA_Date: Date.now, Goals: [])), homeSelectedTimed: .constant([]), homeSelectedDays: .constant([]))
