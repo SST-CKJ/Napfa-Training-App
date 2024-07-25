@@ -43,14 +43,14 @@ struct ContentView: View {
 
     @State var info = data(Age: 12, Gender: false, prev: [], target: [], schedule: [], NAPHA_Date: Date.now, Goals: [])
     @State var selectedTimesCV: [Date] = []
-    
+    @State var selectedDaysCV: [Int] = []
     var body: some View {
         TabView{
-            Home(info: $info, homeSelectedTimed: $selectedTimesCV)
+            Home(info: $info, homeSelectedTimed: $selectedTimesCV, homeSelectedDays: $selectedDaysCV)
                 .tabItem {
                     Label("Home", systemImage: "house")
                 }
-            Settings(info: $info, selectedTimedSettings: $selectedTimesCV)
+            Settings(info: $info, selectedTimedSettings: $selectedTimesCV, selectedDaysSettings: $selectedDaysCV)
                 .tabItem {
                     Label("Settings", systemImage: "gearshape.fill")
                 }

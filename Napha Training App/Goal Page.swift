@@ -22,7 +22,7 @@ struct Goal_Page: View {
     @State private var Goals: [[String]] = []
     @State private var age = 12
     @State private var Days = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
-    @State private var selectedDays: [Int] = []
+    @Binding var selectedDays: [Int]
     @State private var toThrow: String = ""
     @State private var times : [Date] =  Array(repeating: Date(), count: 7)
     @State private var selectedTimed : [Date] = []
@@ -290,5 +290,5 @@ struct Goal_Page: View {
 }
 
 #Preview {
-    Goal_Page(info: .constant(data(Age: 0, Gender: false, prev: [], target: [], schedule: [], NAPHA_Date: Date.now, Goals: [])), selectedTimes: .constant([]))
+    Goal_Page(info: .constant(data(Age: 0, Gender: false, prev: [], target: [], schedule: [], NAPHA_Date: Date.now, Goals: [])), selectedDays: .constant([]), selectedTimes: .constant([]))
 }

@@ -13,12 +13,20 @@ struct Home: View {
     @State private var exercises = ["Sit Ups", "Standing Broad Jump", "Sit & Reach", "Inclined Pull Ups", "Shuttle Run", "2.4km Run"]
     @State private var Goalindx = 0
     @Binding var homeSelectedTimed: [Date]
+    @State var DayIndex = Calendar.current.component(.weekday, from: Date())
+    @Binding var homeSelectedDays: [Int]
+    @State var timeUntilNextWorkout: Int = 0
+    @State var daySelected: Bool = false
+    @State var selectedDayComponent = Date()
+    @State var datesButToday: [Date] = []
+    
     let dateFormatter: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateStyle = .medium // Choose a date style (e.g., .short, .medium, .long)
             formatter.timeStyle = .short // Choose a time style (e.g., .none, .short, .medium, .long)
             return formatter
         }()
+    
     var body: some View {
         NavigationStack{
             VStack{
@@ -93,9 +101,20 @@ struct Home: View {
                 }
             }
         }
+        .onAppear{
+            daySelected = false
+            for i in homeSelectedDays{
+                if daySelected == false {
+                    if Int(Calendar.current.weekdaySymbols[DayIndex]) == Int(i) {
+                        selectedDayComponent =  homeSelectedTimed[homeSelectedDays.firstIndex(of: Int(i))!]
+                        
+                                            }
+                }
+            }
+        }
     }
 }
 
 #Preview {
-    Home(info: .constant(data(Age: 0, Gender: false, prev: [], target: [], schedule: [], NAPHA_Date: Date.now, Goals: [])), homeSelectedTimed: .constant([]))
+    Home(info: .constant(data(Age: 0, Gender: false, prev: [], target: [], schedule: [], NAPHA_Date: Date.now, Goals: [])), homeSelectedTimed: .constant([]), homeSelectedDays: .constant([]))
 }
