@@ -55,6 +55,10 @@ struct Home: View {
                     Text(dateFormatter.string(from: i))
                     //used for testing, remove later
                 }                
+                ForEach(sortedDays, id: \.self){i in
+                    Text((String(i+1)))
+                    
+                }
                 Text("NAPFA EXAMINATION IN")
                     .font(.system(size: 20))
                     .bold()
