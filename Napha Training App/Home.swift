@@ -19,7 +19,26 @@ struct Home: View {
     @State var daySelected: Bool = false
     @State var selectedDayComponent = Date()
     @State var datesButToday: [Date] = []
-    
+    var todayComponents: DateComponents {
+            Calendar.current.dateComponents([.year, .month, .day], from: Date())
+        }
+    var adjustedDates: [Date] {
+            let calendar = Calendar.current
+            let todayComponents = self.todayComponents
+            
+            return homeSelectedTimed.map { date in
+                let timeComponents = calendar.dateComponents([.hour, .minute, .second], from: date)
+                
+                
+                var newComponents = DateComponents()
+                newComponents.year = todayComponents.year
+                newComponents.month = todayComponents.month
+                newComponents.day = todayComponents.day
+         
+                return calendar.date(from: newComponents) ?? date
+            }
+        }
+        
     let dateFormatter: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateStyle = .medium // Choose a date style (e.g., .short, .medium, .long)
