@@ -12,7 +12,7 @@ struct Home: View {
     @Binding var info: data
     @State private var exercises = ["Sit Ups", "Standing Broad Jump", "Sit & Reach", "Inclined Pull Ups", "Shuttle Run", "2.4km Run"]
     @State private var Goalindx = 0
-    @Binding var homeSelectedTimed: [Date]
+    @Binding var homeSelectedTimed: [Date] 
     @State var DayIndex = Calendar.current.component(.weekday, from: Date())
     @Binding var homeSelectedDays: [Int]
     @State var timeUntilNextWorkout: Int = 0
@@ -53,14 +53,15 @@ struct Home: View {
     var body: some View {
         NavigationStack{
             VStack{
-                ForEach(sortedTimes, id: \.self){ i in
+               /* ForEach(sortedTimes, id: \.self){ i in
                     Text(dateFormatter.string(from: i))
                     //used for testing, remove later
                 }                
                 ForEach(sortedDays, id: \.self){i in
                     Text((String(i+1)))
                     
-                }
+                }*/
+                Text(dateFormatter.string(from: nextWorkout))
                 Text("NAPFA EXAMINATION IN")
                     .font(.system(size: 20))
                     .bold()
@@ -128,34 +129,55 @@ struct Home: View {
                 }
             }
         }
-        .onAppear{
-            /*daySelected = false
-            for i in homeSelectedDays{
-                if daySelected == false {
-                    if Int(Calendar.current.weekdaySymbols[DayIndex]) == Int(i) {
-                        selectedDayComponent =  homeSelectedTimed[homeSelectedDays.firstIndex(of: Int(i))!]
-                        
-                                            }
-                }*/
-            zippedTimeDay = zip(homeSelectedDays,homeSelectedTimed).sorted{ $0.0 < $1.0}
+        .onAppear {
+            zippedTimeDay = zip(homeSelectedDays, homeSelectedTimed).sorted { $0.0 < $1.0 }
             sortedDays = zippedTimeDay.map { $0.0 }
             sortedTimes = zippedTimeDay.map { $0.1 }
-            dayNum = (Calendar.current.component(.weekday, from: Date())+5) % 7 + 1
-            if sortedDays.contains(dayNum) {
-                if sortedTimes[sortedDays.firstIndex(of: dayNum)!] > Date() {
-                    resultFromFunction = sortedDays.firstIndex(of: dayNum)!
+            dayNum = (Calendar.current.component(.weekday, from: Date()) + 5) % 7 + 1
+
+            if !sortedTimes.isEmpty {
+                if sortedDays.contains(dayNum) {
+                    if let index = sortedDays.firstIndex(of: dayNum) {
+                        if sortedTimes[index] > Date() {
+                            resultFromFunction = index
+                        } else {
+                            resultFromFunction = index + 1
+                        }
+                    } else {
+                        resultFromFunction = sortedDays.count
+                    }
                 } else {
-                    resultFromFunction = dayNum
+                    var newSortedDays = sortedDays
+                    newSortedDays.append(dayNum)
+                    newSortedDays.sort()
+                    resultFromFunction = newSortedDays.firstIndex(of: dayNum) ?? 0
                 }
                 
-            } else {
-                var newSortedDays: [Int] = sortedDays.map { $0 }
-                newSortedDays.append(dayNum)
-                newSortedDays.sort()
-                resultFromFunction = newSortedDays.firstIndex(of: dayNum)!
+                // Ensure resultFromFunction is within bounds
+                if resultFromFunction < sortedTimes.count {
+                    nextWorkout = sortedTimes[resultFromFunction]
+                    var nextWorkoutComponents = Calendar.current.dateComponents([.hour, .minute], from: nextWorkout)
+                    var todayComponents = Calendar.current.dateComponents([.year, .month, .day], from: Date())
+
+                    if sortedDays.indices.contains(resultFromFunction) {
+                        if sortedDays[resultFromFunction] == dayNum {
+                            nextWorkoutComponents.year = todayComponents.year
+                            nextWorkoutComponents.month = todayComponents.month
+                            nextWorkoutComponents.day = todayComponents.day
+                        } else {
+                            nextWorkoutComponents.day = todayComponents.day
+                            nextWorkout = Calendar.current.date(byAdding: .day, value: sortedDays[resultFromFunction] - dayNum, to: nextWorkout)!
+                            nextWorkoutComponents.year = todayComponents.year
+                            nextWorkoutComponents.month = todayComponents.month
+                        }
+                    }
+                } else {
+                    // Handle the case where resultFromFunction is out of bounds
+                    print("Error: resultFromFunction is out of bounds for sortedTimes.")
+                }
             }
-            
-            }
+        }
+
         }
     }
 
