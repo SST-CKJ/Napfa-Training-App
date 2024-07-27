@@ -19,6 +19,7 @@ struct Home: View {
     @State var daySelected: Bool = false
     @State var selectedDayComponent = Date()
     @State var datesButToday: [Date] = []
+    @State var resultFromFunction: Int = 0
     var todayComponents: DateComponents {
             Calendar.current.dateComponents([.year, .month, .day], from: Date())
         }
@@ -38,7 +39,7 @@ struct Home: View {
                 return calendar.date(from: newComponents) ?? date
             }
         }
-        
+    @State var dayNum: Int = (Calendar.current.component(.weekday, from: Date())+5) % 7 + 1
     let dateFormatter: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateStyle = .medium // Choose a date style (e.g., .short, .medium, .long)
@@ -48,6 +49,7 @@ struct Home: View {
     @State var zippedTimeDay: [(Int,Date)] = []
     @State var sortedDays: [Int] = []
     @State var sortedTimes: [Date] = []
+    @State var nextWorkout: Date = Date()
     var body: some View {
         NavigationStack{
             VStack{
@@ -138,6 +140,21 @@ struct Home: View {
             zippedTimeDay = zip(homeSelectedDays,homeSelectedTimed).sorted{ $0.0 < $1.0}
             sortedDays = zippedTimeDay.map { $0.0 }
             sortedTimes = zippedTimeDay.map { $0.1 }
+            dayNum = (Calendar.current.component(.weekday, from: Date())+5) % 7 + 1
+            if sortedDays.contains(dayNum) {
+                if sortedTimes[sortedDays.firstIndex(of: dayNum)!] > Date() {
+                    resultFromFunction = sortedDays.firstIndex(of: dayNum)!
+                } else {
+                    resultFromFunction = dayNum
+                }
+                
+            } else {
+                var newSortedDays: [Int] = sortedDays.map { $0 }
+                newSortedDays.append(dayNum)
+                newSortedDays.sort()
+                resultFromFunction = newSortedDays.firstIndex(of: dayNum)!
+            }
+            
             }
         }
     }
