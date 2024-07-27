@@ -24,7 +24,7 @@ struct Goal_Page: View {
     @State private var Days = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
     @Binding var selectedDays: [Int]
     @State private var toThrow: String = ""
-    @State private var times : [Date] =  Array(repeating: Date(), count: 7)
+    @State  var times : [Date] =  Array(repeating: Date(), count: 7)
     @State private var selectedTimed : [Date] = []
     
     @State private var numberArray = [1,2,3,4,5,6,7]
@@ -271,6 +271,7 @@ struct Goal_Page: View {
                     info.prev = prev
                     info.Goals = Goals
                     info.Age = age
+                    
                     dismiss()
                 
                     
