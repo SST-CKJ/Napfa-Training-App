@@ -14,7 +14,7 @@ struct Home: View {
     @Binding var homeSelectedTimed: [Date]
     @State var DayIndex = Calendar.current.component(.weekday, from: Date())
     @Binding var homeSelectedDays: [Int]
-    @State var timeUntilNextWorkout: DateComponents = Calendar.current.dateComponents([.hour], from: Date())
+    @State var timeUntilNextWorkout: Int = 0
     @State var daySelected: Bool = false
     @State var selectedDayComponent = Date()
     @State var datesButToday: [Date] = []
@@ -49,7 +49,7 @@ struct Home: View {
     @State var sortedDays: [Int] = []
     @State var sortedTimes: [Date] = []
     @State var nextWorkout: Date = Date()
-    
+
     var body: some View {
         NavigationStack{
             VStack{
@@ -62,7 +62,8 @@ struct Home: View {
                     
                 }*/
                 Text(dateFormatter.string(from: nextWorkout))
-                
+                Text(sortedDays.isEmpty ? "0" : String(sortedDays[resultFromFunction]))
+
                 Text("NAPFA EXAMINATION IN")
                     .font(.system(size: 20))
                     .bold()
@@ -87,7 +88,7 @@ struct Home: View {
                             Image("Calendar")
                                 .scaledToFit()
                                 .scaleEffect(0.55)
-                            Text(String(timeUntilNextWorkout.hour!+1))
+                            Text("2")
                                 .font(.system(size: 60))
                                 .bold()
                         }
@@ -167,11 +168,15 @@ struct Home: View {
                 nextWorkout = sortedTimes[resultFromFunction]
                 var nextWorkoutComponents = Calendar.current.dateComponents([.hour, .minute], from: nextWorkout)
                 
-                var todayComponents = Calendar.current.dateComponents([.year, .month, .day], from: Date())
-                if sortedDays[resultFromFunction] == dayNum {
+                let todayComponents = Calendar.current.dateComponents([.year, .month, .day], from: Date())
+                let comparingComponents = Calendar.current.dateComponents([.year, .month, .day], from: Date())
+                let comparingDate = Calendar.current.date(from: comparingComponents)
+
+                if (sortedDays[resultFromFunction] == dayNum-1) && (comparingDate! < nextWorkout ){
                     nextWorkoutComponents.year = todayComponents.year
                     nextWorkoutComponents.month = todayComponents.month
                     nextWorkoutComponents.day = todayComponents.day
+                    nextWorkout = Calendar.current.date(from: nextWorkoutComponents)!
                 } else {
                     nextWorkoutComponents.day = todayComponents.day
                     nextWorkout = Calendar.current.date(byAdding: .day, value: sortedDays[resultFromFunction] - dayNum + 8, to: nextWorkout)!
@@ -180,7 +185,6 @@ struct Home: View {
                     
                 }
             }
-            timeUntilNextWorkout = Calendar.current.dateComponents([.hour], from: Date(), to: nextWorkout)
         }
         }
     }
