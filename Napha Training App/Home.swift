@@ -14,7 +14,7 @@ struct Home: View {
     @Binding var homeSelectedTimed: [Date]
     @State var DayIndex = Calendar.current.component(.weekday, from: Date())
     @Binding var homeSelectedDays: [Int]
-    @State var timeUntilNextWorkout: Int = 0
+    @State var timeUntilNextWorkout: DateComponents = Calendar.current.dateComponents([.hour], from: Date())
     @State var daySelected: Bool = false
     @State var selectedDayComponent = Date()
     @State var datesButToday: [Date] = []
@@ -49,6 +49,7 @@ struct Home: View {
     @State var sortedDays: [Int] = []
     @State var sortedTimes: [Date] = []
     @State var nextWorkout: Date = Date()
+    
     var body: some View {
         NavigationStack{
             VStack{
@@ -86,7 +87,7 @@ struct Home: View {
                             Image("Calendar")
                                 .scaledToFit()
                                 .scaleEffect(0.55)
-                            Text("2")
+                            Text(String(timeUntilNextWorkout.hour!+1))
                                 .font(.system(size: 60))
                                 .bold()
                         }
@@ -179,6 +180,7 @@ struct Home: View {
                     
                 }
             }
+            timeUntilNextWorkout = Calendar.current.dateComponents([.hour], from: Date(), to: nextWorkout)
         }
         }
     }
