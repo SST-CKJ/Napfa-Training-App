@@ -20,50 +20,54 @@ struct Home: View {
     @State var datesButToday: [Date] = []
     @State var resultFromFunction: Int = 0
     var todayComponents: DateComponents {
-            Calendar.current.dateComponents([.year, .month, .day], from: Date())
-        }
+        Calendar.current.dateComponents([.year, .month, .day], from: Date())
+    }
     var adjustedDates: [Date] {
-            let calendar = Calendar.current
-            let todayComponents = self.todayComponents
+        let calendar = Calendar.current
+        let todayComponents = self.todayComponents
+        
+        return homeSelectedTimed.map { date in
+            let timeComponents = calendar.dateComponents([.hour, .minute, .second], from: date)
             
-            return homeSelectedTimed.map { date in
-                let timeComponents = calendar.dateComponents([.hour, .minute, .second], from: date)
-                
-                
-                var newComponents = DateComponents()
-                newComponents.year = todayComponents.year
-                newComponents.month = todayComponents.month
-                newComponents.day = todayComponents.day
-         
-                return calendar.date(from: newComponents) ?? date
-            }
+            
+            var newComponents = DateComponents()
+            newComponents.year = todayComponents.year
+            newComponents.month = todayComponents.month
+            newComponents.day = todayComponents.day
+            
+            return calendar.date(from: newComponents) ?? date
         }
+    }
     @State var dayNum: Int = (Calendar.current.component(.weekday, from: Date())+5) % 7 + 1
     let dateFormatter: DateFormatter = {
-            let formatter = DateFormatter()
-            formatter.dateStyle = .medium // Choose a date style (e.g., .short, .medium, .long)
-            formatter.timeStyle = .short // Choose a time style (e.g., .none, .short, .medium, .long)
-            return formatter
-        }()
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium // Choose a date style (e.g., .short, .medium, .long)
+        formatter.timeStyle = .short // Choose a time style (e.g., .none, .short, .medium, .long)
+        return formatter
+    }()
     @State var zippedTimeDay: [(Int,Date)] = []
     @State var sortedDays: [Int] = []
     @State var sortedTimes: [Date] = []
     @State var nextWorkout: Date = Date()
-
+    
     var body: some View {
         NavigationStack{
             VStack{
-               /* ForEach(sortedTimes, id: \.self){ i in
-                    Text(dateFormatter.string(from: i))
-                    //used for testing, remove later
-                }
-                ForEach(sortedDays, id: \.self){i in
-                    Text((String(i+1)))
-                    
-                }*/
+                /* ForEach(sortedTimes, id: \.self){ i in
+                 Text(dateFormatter.string(from: i))
+                 //used for testing, remove later
+                 }
+                 ForEach(sortedDays, id: \.self){i in
+                 Text((String(i+1)))
+                 
+                 }*/
                 Text(dateFormatter.string(from: nextWorkout))
                 Text(sortedDays.isEmpty ? "0" : String(sortedDays[resultFromFunction]))
-
+                Text(String(dayNum))
+                Text("Sorted Days: \(sortedDays.map { String($0) }.joined(separator: ", "))")
+                                .font(.system(size: 16))
+                                .foregroundColor(.gray)
+                
                 Text("NAPFA EXAMINATION IN")
                     .font(.system(size: 20))
                     .bold()
@@ -140,16 +144,20 @@ struct Home: View {
              
              }
              }*/
+            
             zippedTimeDay = zip(homeSelectedDays,homeSelectedTimed).sorted{ $0.0 < $1.0}
             sortedDays = zippedTimeDay.map { $0.0 }
             sortedTimes = zippedTimeDay.map { $0.1 }
             dayNum = (Calendar.current.component(.weekday, from: Date())+5) % 7 + 1
             if sortedTimes.isEmpty == false {
                 if sortedDays.contains(dayNum) {
+                    
+                    
+                
                     if sortedTimes[sortedDays.firstIndex(of: dayNum)!] > Date() {
                         resultFromFunction = sortedDays.firstIndex(of: dayNum)!
                     } else {
-                        resultFromFunction = sortedDays.firstIndex(of: dayNum)! + 1
+                        resultFromFunction = sortedDays.firstIndex(of: dayNum)!
                     }
                     
                 } else {
@@ -165,29 +173,45 @@ struct Home: View {
                 }
             }
             if sortedTimes.isEmpty == false {
+                print(sortedTimes)
+                print(resultFromFunction)
                 nextWorkout = sortedTimes[resultFromFunction]
                 var nextWorkoutComponents = Calendar.current.dateComponents([.hour, .minute], from: nextWorkout)
                 
                 let todayComponents = Calendar.current.dateComponents([.year, .month, .day], from: Date())
-                let comparingComponents = Calendar.current.dateComponents([.year, .month, .day], from: Date())
+                let comparingComponents = Calendar.current.dateComponents([.hour, .minute, .year, .month, .day], from: Date())
                 let comparingDate = Calendar.current.date(from: comparingComponents)
-
-                if (sortedDays[resultFromFunction] == dayNum-1) && (comparingDate! < nextWorkout ){
+                var combinedComponents = DateComponents()
+                combinedComponents.hour = nextWorkoutComponents.hour
+                combinedComponents.minute = nextWorkoutComponents.minute
+                combinedComponents.day = todayComponents.day
+                let dayOffset = sortedDays[resultFromFunction] + 1 - dayNum
+                                combinedComponents.day = todayComponents.day! + dayOffset
+                combinedComponents.day! = todayComponents.day! + dayOffset
+                
+                combinedComponents.month = todayComponents.month
+                combinedComponents.year = todayComponents.year
+                var combined = Calendar.current.date(from: combinedComponents)!
+                
+                if (Date()>combined){
                     nextWorkoutComponents.year = todayComponents.year
                     nextWorkoutComponents.month = todayComponents.month
-                    nextWorkoutComponents.day = todayComponents.day
+                    nextWorkoutComponents.day = todayComponents.day! + sortedDays[resultFromFunction]+8 - dayNum
                     nextWorkout = Calendar.current.date(from: nextWorkoutComponents)!
                 } else {
-                    nextWorkoutComponents.day = todayComponents.day
-                    nextWorkout = Calendar.current.date(byAdding: .day, value: sortedDays[resultFromFunction] - dayNum + 8, to: nextWorkout)!
+                    
+                    
                     nextWorkoutComponents.year = todayComponents.year
                     nextWorkoutComponents.month = todayComponents.month
+                    nextWorkoutComponents.day = todayComponents.day! + sortedDays[resultFromFunction]+1 - dayNum
+                    nextWorkout = Calendar.current.date(from: nextWorkoutComponents)!
                     
                 }
+                
             }
         }
-        }
     }
+}
 
 
 #Preview {
