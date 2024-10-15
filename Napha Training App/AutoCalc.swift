@@ -1,7 +1,8 @@
 import SwiftUI
 
 struct AutoCalcView: View {
-    @Binding var info: data
+    @StateObject var info: dataViewModel
+    //@Binding var info: data
     @State private var sitUps: Float = 0.0
     @State private var sitReach: Float = 0.0
     @State private var calcPicker: String = "Sit-Ups"
@@ -122,7 +123,7 @@ struct AutoCalcView: View {
                 .scaleEffect(0.6)
 
             let currentValue = calcPicker == "Sit-Ups" ? Int(sitUps) : Int(sitReach)
-            let Grade = gradingSystems[calcPicker]?(info.Age, info.Gender, currentValue) ?? "N/A"
+            let Grade = gradingSystems[calcPicker]?(info.info_object.Age, info.info_object.Gender, currentValue) ?? "N/A"
 
             Text(calcPicker == "Sit-Ups" ? String(format: "%.0f reps", sitUps) : String(format: "%.0f cm", sitReach))
 
@@ -138,5 +139,5 @@ struct AutoCalcView: View {
 }
 
 #Preview {
-    AutoCalcView(info: .constant(data(Age: 0, Gender: false, prev: [], targ: [], schedule: [], NAPFA_Date: Date.now, Goals: [])))
+    AutoCalcView(info: dataViewModel())
 }

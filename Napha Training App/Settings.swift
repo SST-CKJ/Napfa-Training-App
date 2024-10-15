@@ -7,7 +7,8 @@ import SwiftUI
 
 struct Settings: View {
     
-    @Binding var info: data
+    //@Binding var info: data
+    @StateObject var info: dataViewModel
     @Binding var GoalSheet : Bool
     @Binding var AgeSheet:Bool
     @Binding var SchedSheet: Bool
@@ -51,7 +52,7 @@ struct Settings: View {
                     .cornerRadius(10)
                 }
                 .fullScreenCover(isPresented: $GoalSheetSettings) {
-                    Goal_Page(start: .constant(false), info: $info, Sex: $Sex, Age: $age, GoalSheet: $GoalSheet)
+                    Goal_Page(start: .constant(false), info: dataViewModel(), Sex: $Sex, Age: $age, GoalSheet: $GoalSheet)
                 }
                 Button(action: {
                     autoCalcSettings.toggle()
@@ -68,7 +69,7 @@ struct Settings: View {
                     .cornerRadius(10)
                 }
                 .fullScreenCover(isPresented: $autoCalcSettings){
-                    AutoCalcView(info: $info)
+                    AutoCalcView(info: dataViewModel())
                 }
     
                 Button(action: {
@@ -86,7 +87,7 @@ struct Settings: View {
                     .cornerRadius(10)
                 }
                 .fullScreenCover(isPresented: $AgeSheetSettings){
-                    Age_Gender(start: .constant(false), info: $info, ageFirstTime: $ftSettings, ageSheet: $AgeSheet)
+                    Age_Gender(start: .constant(false), info: dataViewModel(), ageFirstTime: $ftSettings, ageSheet: $AgeSheet)
                 }
                 
                 Button(action: {
@@ -104,7 +105,7 @@ struct Settings: View {
                     .cornerRadius(10)
                 }
                 .fullScreenCover(isPresented: $SchedSheet){
-                    Scheduling_(start: .constant(false), info: $info, selectedDays: $selectedDaysSettings, selectedTimes: $selectedTimedSettings, schedSheet: $SchedSheet)
+                    Scheduling_(start: .constant(false), info: dataViewModel(), selectedDays: $selectedDaysSettings, selectedTimes: $selectedTimedSettings, schedSheet: $SchedSheet)
                 }
             }
             .padding(.horizontal)
@@ -115,6 +116,6 @@ struct Settings: View {
 
 struct Settings_Previews: PreviewProvider {
     static var previews: some View {
-        Settings(info:.constant(data(Age: 0, Gender: false, prev: [], targ: [], schedule: [], NAPFA_Date: Date.now, Goals: [])), GoalSheet:.constant(false), AgeSheet:.constant(false), SchedSheet:.constant(false), selectedTimedSettings:.constant([]), selectedDaysSettings: .constant([]), Sex: .constant(true), age: .constant(0), ftSettings: .constant(true))
+        Settings(info: dataViewModel(), GoalSheet:.constant(false), AgeSheet:.constant(false), SchedSheet:.constant(false), selectedTimedSettings:.constant([]), selectedDaysSettings: .constant([]), Sex: .constant(true), age: .constant(0), ftSettings: .constant(true))
     }
 }

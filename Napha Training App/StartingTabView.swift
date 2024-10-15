@@ -10,7 +10,7 @@ import SwiftUI
 struct StartingTabView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var selection: Int = 0
-    @Binding var info: data
+    @StateObject var info: dataViewModel
     @Binding var ageFirstTime: Bool
     @Binding var ageSheet: Bool
     @Binding var Sex: Bool
@@ -47,13 +47,13 @@ struct StartingTabView: View {
                 }.padding(.vertical, -100)
             
                 TabView(selection: $selection) {
-                    Age_Gender(start: .constant(true), info: $info, ageFirstTime: $ageFirstTime, ageSheet: $ageSheet)
+                    Age_Gender(start: .constant(true), info: dataViewModel(), ageFirstTime: $ageFirstTime, ageSheet: $ageSheet)
                         .tag(0)
                     
-                    Goal_Page(start: .constant(true), info: $info, Sex: $Sex, Age: $Age, GoalSheet: $goalSheet)
+                    Goal_Page(start: .constant(true), info: dataViewModel(), Sex: $Sex, Age: $Age, GoalSheet: $goalSheet)
                         .tag(1)
                     
-                    Scheduling_(start: .constant(true), info: $info, selectedDays: $selectedDays, selectedTimes: $selectedTimes, schedSheet: $schedSheet)
+                    Scheduling_(start: .constant(true), info: dataViewModel(), selectedDays: $selectedDays, selectedTimes: $selectedTimes, schedSheet: $schedSheet)
                         .tag(2)
                     
                     VStack {
@@ -80,7 +80,7 @@ struct StartingTabView: View {
 }
 
 #Preview {
-    StartingTabView(info: .constant(data(Age: 0, Gender: false, prev: [], targ: [], schedule: [], NAPFA_Date: Date.now, Goals: [])),
+    StartingTabView(info: dataViewModel(),
                     ageFirstTime: .constant(false),
                     ageSheet: .constant(false),
                     Sex: .constant(false),

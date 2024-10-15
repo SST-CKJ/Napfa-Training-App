@@ -7,7 +7,8 @@ struct Goal_Page: View {
     
     @State private var endCalc: String = ""
     @State private var autoCalc: Int = 0
-    @Binding var info: data
+    @StateObject var info: dataViewModel
+    //@Binding var info: data
     @Binding var Sex: Bool
     @Binding var Age: Int
     @Binding var GoalSheet: Bool
@@ -38,7 +39,7 @@ struct Goal_Page: View {
                     Link("Napfa Standards: Female", destination: URL(string: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiZlF2X2fKqbhaLL3Y49sbaRuk8Thxa1mAtQ0ZSqrVn6w1yAyN2LXgWXvFP9EohhreOH-FpXI9b_XB8PUQgEpZkmBIz_LDLZGzD35gq4_Vc_oWTDNwBrS3-TBFRgwlAfRBUBlRK5Sbypns/s1600/napfa+sec_0002.jpg")!)
                         .offset(y: -200)
                     
-                    NavigationLink(destination: AutoCalcView(info: $info), label: {
+                    NavigationLink(destination: AutoCalcView(info: dataViewModel()), label: {
                         
                         Text(Image(systemName: "info.circle"))
                             .baselineOffset(1)
@@ -203,9 +204,9 @@ struct Goal_Page: View {
                     }
                     if(!start){
                         Button{
-                            info.targ = targ
-                            info.prev = prev
-                            info.Goals = Goals
+                            info.info_object.targ = targ
+                            info.info_object.prev = prev
+                            info.info_object.Goals = Goals
                             dismiss()
                             
                             
@@ -235,13 +236,13 @@ struct Goal_Page: View {
                         VStack{
                         }
                         .onChange(of: targ) {
-                            info.targ = targ
+                            info.info_object.targ = targ
                         }
                         .onChange(of: prev) {
-                            info.prev = prev
+                            info.info_object.prev = prev
                         }
                         .onChange(of: Goals) {
-                            info.Goals = Goals
+                            info.info_object.Goals = Goals
                         }
                     }
                 }
@@ -250,9 +251,9 @@ struct Goal_Page: View {
             .alert(isPresented: $showAlert, content: {
                 Alert(title: Text("Changing the results will alter workout programme."),
                       primaryButton: .destructive(Text("Save"), action:  {
-                    info.targ = targ
-                    info.prev = prev
-                    info.Goals = Goals
+                    info.info_object.targ = targ
+                    info.info_object.prev = prev
+                    info.info_object.Goals = Goals
                     dismiss()
                     
                 }),
@@ -260,11 +261,11 @@ struct Goal_Page: View {
             })
             .onAppear{
                 if let storedSex = UserDefaults.standard.object(forKey: "sex") as? Bool {
-                    info.Gender = storedSex
+                    info.info_object.Gender = storedSex
                     
                 }
                 if let storedAge = UserDefaults.standard.object(forKey: "age") as? Int{
-                    info.Age = storedAge
+                    info.info_object.Age = storedAge
                 }
                 if let storedSitUps = UserDefaults.standard.object(forKey: "storedSit") as? Float{
                     sitUps = storedSitUps
@@ -311,7 +312,7 @@ struct Goal_Page: View {
 
 
 #Preview {
-    Goal_Page(start: .constant(false), info: .constant(data(Age: 0, Gender: false, prev: [], targ: [], schedule: [], NAPFA_Date: Date.now, Goals: [])), Sex: .constant(true), Age: .constant(0), GoalSheet: .constant(false), showAlert: false)
+    Goal_Page(start: .constant(false), info: dataViewModel(), Sex: .constant(true), Age: .constant(0), GoalSheet: .constant(false), showAlert: false)
 }
 
 

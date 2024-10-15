@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct Workout: View {
-    
-    @Binding var info: data
+    @StateObject var info = dataViewModel()
+ //   @Binding var info: data
     @State var timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     @State private var exercises = ["Sit Ups", "Standing Broad Jump", "Sit & Reach", "Inclined Pull Ups", "Shuttle Run", "2.4km Run"]
     @State var currentExercise = ["",[0],0]
@@ -215,8 +215,8 @@ struct Workout: View {
                                 //    diff 2: Below E: 1-9, D: 5-12
                                 //    diff 1: Below E: 1-5, D-C: 5-9, Above: 9-12
                                 
-                                SitupsP = info.prev[0] == "A" ? 5:(info.prev[0] == "B" ? 4:(info.prev[0] == "C" ? 3:(info.prev[0] == "D" ? 2:(info.prev[0] == "E" ? 1:0))))
-                                SitupsT = info.targ[0] == "A" ? 5:(info.targ[0] == "B" ? 4:(info.targ[0] == "C" ? 3:(info.targ[0] == "D" ? 2:(info.targ[0] == "E" ? 1:0))))
+                                SitupsP = info.info_object.prev[0] == "A" ? 5:(info.info_object.prev[0] == "B" ? 4:(info.info_object.prev[0] == "C" ? 3:(info.info_object.prev[0] == "D" ? 2:(info.info_object.prev[0] == "E" ? 1:0))))
+                                SitupsT = info.info_object.targ[0] == "A" ? 5:(info.info_object.targ[0] == "B" ? 4:(info.info_object.targ[0] == "C" ? 3:(info.info_object.targ[0] == "D" ? 2:(info.info_object.targ[0] == "E" ? 1:0))))
                                 
                                 if ((SitupsT - SitupsP) >= 4){
                                     weeksRange = [1,12]
@@ -325,6 +325,6 @@ struct Workout: View {
 }
 
 #Preview {
-    Workout(info: .constant(data(Age: 0, Gender: false, prev: ["B","","","","",""], targ: ["A","","","","",""], schedule: [], NAPFA_Date: Date.now, Goals: [])))
+    Workout(info: dataViewModel())
 }
 

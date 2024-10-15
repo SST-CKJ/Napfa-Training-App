@@ -2,7 +2,8 @@ import SwiftUI
 
 struct Age_Gender: View {
     @Binding var start: Bool
-    @Binding var info: data
+    @StateObject var info = dataViewModel()
+   // @Binding var info: data
     @State var Sex = true // Default to Male
     @State var birthdate = Date() // Default to today's date
     @Binding var ageFirstTime: Bool
@@ -71,11 +72,11 @@ struct Age_Gender: View {
                     Button(action: {
                         GenderSheet.toggle()
                     }) {
-                        Text(info.Gender ? "Male" : "Female") // Display saved sex
+                        Text(info.info_object.Gender ? "Male" : "Female") // Display saved sex
                             .foregroundColor(.black)
                     }
                     .sheet(isPresented: $GenderSheet) {
-                        GenderSelectionView(info: $info, sex: $Sex)
+                        GenderSelectionView(info: dataViewModel(), sex: $Sex)
                             .presentationDetents([.fraction(0.45)])
                             .presentationDragIndicator(.visible)
                     }
@@ -114,7 +115,7 @@ struct Age_Gender: View {
     }
     
     struct GenderSelectionView: View {
-        @Binding var info: data
+        @StateObject var info = dataViewModel()
         @Environment(\.presentationMode) var presentationMode
         @State private var selectedGender: String? = "Male"
         @Binding var sex: Bool
@@ -131,11 +132,11 @@ struct Age_Gender: View {
                             print(selectedGender ?? "none provided")
                             if selectedGender == "Female"{
                                 sex = false
-                                info.Gender = false
+                                info.info_object.Gender = false
                                 print("now female")
                             } else {
                                 sex = true
-                                info.Gender = true
+                                info.info_object.Gender = true
                                 print("now male")
                             }
                         }
@@ -145,11 +146,11 @@ struct Age_Gender: View {
                             print(selectedGender ?? "none provided")
                             if selectedGender == "Female"{
                                 sex = false
-                                info.Gender = false
+                                info.info_object.Gender = false
                                 print("now female")
                             } else {
                                 sex = true
-                                info.Gender = true
+                                info.info_object.Gender = true
                                 print("now male")
                             }
                         }
@@ -158,20 +159,20 @@ struct Age_Gender: View {
                 
                 Button{
                     if selectedGender == "Male" {
-                        info.Gender = true
+                        info.info_object.Gender = true
                         sex = true
                     } else if selectedGender == "Female" {
-                        info.Gender = false
+                        info.info_object.Gender = false
                         sex = false
                     }
-                    print(info.Gender)
+                    print(info.info_object.Gender)
                     
                 } label: {
                 }
                 Button{
                     
                     presentationMode.wrappedValue.dismiss()
-                    print(info.Gender)
+                    print(info.info_object.Gender)
                     
                 } label: {
                     ZStack{
@@ -238,7 +239,7 @@ struct Age_Gender_Previews: PreviewProvider {
     static var previews: some View {
 
 
-        Age_Gender(start: .constant(false), info:.constant(data(Age: 0, Gender: false, prev: [], targ: [], schedule: [], NAPFA_Date: Date.now, Goals: [])), ageFirstTime: .constant(false), ageSheet: .constant(false))
+        Age_Gender(start: .constant(false), info: dataViewModel(), ageFirstTime: .constant(false), ageSheet: .constant(false))
 
     }
 }

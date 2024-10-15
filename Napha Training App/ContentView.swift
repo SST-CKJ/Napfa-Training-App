@@ -1,5 +1,6 @@
 import SwiftUI
 import AVFoundation
+import Combine
 
 class SoundManager {
     static let instance = SoundManager()
@@ -40,6 +41,33 @@ struct data{
     }
 }
 
+
+
+class newData: ObservableObject{
+    @Published var Age: Int
+    @Published var Gender: Bool
+    @Published var prev: [String]
+    @Published var targ: [String]
+    @Published var schedule: [String]
+    @Published var NAPFA_Date: Date
+    @Published var Goals: [[String]]
+    
+    init(Age: Int, Gender: Bool, prev: [String], targ: [String], schedule: [String], NAPFA_Date: Date, Goals: [[String]]) {
+        self.Age = Age
+        self.Gender = Gender
+        self.prev = prev
+        self.targ = targ
+        self.schedule = schedule
+        self.NAPFA_Date = NAPFA_Date
+        self.Goals = Goals
+        
+        UITabBar.appearance().isHidden = true
+    }
+}
+class dataViewModel: ObservableObject {
+    @Published var info_object = newData(Age: 12, Gender: false, prev: ["","","","","",""], targ: ["","","","","",""], schedule: [], NAPFA_Date: Date.now, Goals: [])
+}
+
 struct ContentView: View {
     
     @State var info = data(Age: 12, Gender: false, prev: ["","","","","",""], targ: ["","","","","",""], schedule: [], NAPFA_Date: Date.now, Goals: [])
@@ -58,12 +86,12 @@ struct ContentView: View {
     var body: some View {
         
         if selectedTab == .house {
-            Home(info: $info, prevWorkout: prevWorkout, homeSelectedTimed: $selectedTimesCV, homeSelectedDays: $selectedDaysCV)
+            Home(info: dataViewModel(), prevWorkout: prevWorkout, homeSelectedTimed: $selectedTimesCV, homeSelectedDays: $selectedDaysCV)
                 .tabItem {
                     Label("Home", systemImage: "house")
                 }
                 .fullScreenCover(isPresented: $showLogin){
-                    StartingPage(info: $info,ageFirstTime: $firstTime,ageSheet: $AgeSheetCV,Sex: $Sex,Age: $age,goalSheet: $GoalSheetCV,schedSheet: $SchedSheetCV, selectedDays: $selectedDaysCV,selectedTimes: $selectedTimesCV, showLogin: $showLogin)
+                    StartingPage(info: dataViewModel(),ageFirstTime: $firstTime,ageSheet: $AgeSheetCV,Sex: $Sex,Age: $age,goalSheet: $GoalSheetCV,schedSheet: $SchedSheetCV, selectedDays: $selectedDaysCV,selectedTimes: $selectedTimesCV, showLogin: $showLogin)
                 }
                 .onChange(of: showLogin){
                     if showLogin == false {
@@ -73,7 +101,7 @@ struct ContentView: View {
                  }
             
         } else if selectedTab == .dumbbell{
-            Workout(info: .constant(data(Age: 12, Gender: false, prev: ["","","","","",""], targ: ["","","","","",""], schedule: [], NAPFA_Date: Date.now, Goals: [])))
+            Workout(info: dataViewModel())
                 .tabItem {
                     ZStack{
                         Circle()
@@ -89,7 +117,7 @@ struct ContentView: View {
                     }
                 }
         } else if selectedTab == .gearshape{
-            Settings(info: $info, GoalSheet: $GoalSheetCV, AgeSheet: $AgeSheetCV, SchedSheet: $SchedSheetCV, selectedTimedSettings: $selectedTimesCV, selectedDaysSettings: $selectedDaysCV, Sex: $Sex, age: $age, ftSettings: $firstTime)
+            Settings(info: dataViewModel(), GoalSheet: $GoalSheetCV, AgeSheet: $AgeSheetCV, SchedSheet: $SchedSheetCV, selectedTimedSettings: $selectedTimesCV, selectedDaysSettings: $selectedDaysCV, Sex: $Sex, age: $age, ftSettings: $firstTime)
                 .tabItem {
                     Label("Settings", systemImage: "gearshape.fill")
                 }

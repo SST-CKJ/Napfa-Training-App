@@ -1,8 +1,8 @@
 import SwiftUI
 
 struct StartingPage: View {
-    
-    @Binding var info: data
+    @StateObject var info: dataViewModel
+   // @Binding var info: data
     @State var TabViewSheet = false
     @State var showNewView = false
     @Binding var ageFirstTime: Bool
@@ -47,7 +47,7 @@ struct StartingPage: View {
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 40)
                     
-                    NavigationLink(destination: StartingTabView(info: $info,ageFirstTime: $ageFirstTime,ageSheet: $ageSheet,Sex: $Sex,Age: $Age,goalSheet: $goalSheet,selectedDays: $selectedDays,selectedTimes: $selectedTimes, schedSheet: $schedSheet, showLogin: $showLogin)) {
+                    NavigationLink(destination: StartingTabView(info: dataViewModel(),ageFirstTime: $ageFirstTime,ageSheet: $ageSheet,Sex: $Sex,Age: $Age,goalSheet: $goalSheet,selectedDays: $selectedDays,selectedTimes: $selectedTimes, schedSheet: $schedSheet, showLogin: $showLogin)) {
                         VStack {
                             Text("Get Started")
                                 .font(.title)
@@ -74,6 +74,6 @@ struct StartingPage: View {
 }
 struct StartingPage_Previews: PreviewProvider {
     static var previews: some View {
-        StartingPage(info:.constant(data(Age: 0, Gender: false, prev: [], targ: [], schedule: [], NAPFA_Date: Date.now, Goals: [])), ageFirstTime: .constant(false), ageSheet: .constant(false), Sex: .constant(false), Age: .constant(0), goalSheet: .constant(false), schedSheet: .constant(false), selectedDays: .constant([0]), selectedTimes: .constant([]), showLogin: .constant(false) )
+        StartingPage(info: dataViewModel(), ageFirstTime: .constant(false), ageSheet: .constant(false), Sex: .constant(false), Age: .constant(0), goalSheet: .constant(false), schedSheet: .constant(false), selectedDays: .constant([0]), selectedTimes: .constant([]), showLogin: .constant(false) )
     }
 }   

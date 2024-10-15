@@ -9,8 +9,8 @@ import UserNotifications
 
 
 struct Home: View {
-   
-    @Binding var info: data
+    @StateObject var info: dataViewModel
+   // @Binding var info: data
     @State var prevWorkout = UserDefaults.standard.string(forKey: "prevWorkout") ?? ""
     @State var combined: Date = Date()
     @State private var exercises = ["Sit Ups", "Standing Broad Jump", "Sit & Reach", "Inclined Pull Ups", "Shuttle Run", "2.4km Run"]
@@ -76,12 +76,12 @@ struct Home: View {
 
                     .offset(y: 100)
                 
-                Text("\(info.NAPFA_Date.formatted(date: .long, time: .omitted))")
+                Text("\(info.info_object.NAPFA_Date.formatted(date: .long, time: .omitted))")
                     .font(.system(size: 45))
                     .bold()
                     .offset(y: 100)
                     .contextMenu{
-                        Text("\(Calendar.current.dateComponents([.month,.day], from: Date.now, to: info.NAPFA_Date).month ?? 0) months : \(Calendar.current.dateComponents([.month,.day], from: Date.now, to: info.NAPFA_Date).day ?? 0) days")
+                        Text("\(Calendar.current.dateComponents([.month,.day], from: Date.now, to: info.info_object.NAPFA_Date).month ?? 0) months : \(Calendar.current.dateComponents([.month,.day], from: Date.now, to: info.info_object.NAPFA_Date).day ?? 0) days")
                     }
                 Text("Note: This is an MVP")
                     .offset(y:100)
@@ -262,8 +262,8 @@ struct Home: View {
 //                    .offset(y: -100)
 
                 Button{
-                    if info.Goals != []{
-                        if (Goalindx == info.Goals.count - 1){
+                    if info.info_object.Goals != []{
+                        if (Goalindx == info.info_object.Goals.count - 1){
                             Goalindx = 0
                         }
                         else{
@@ -278,8 +278,8 @@ struct Home: View {
                             .frame(width: 350, height: 120)
                             .offset(y: 56)
                             
-                        Text(info.Goals == [] ? "You dont have any goals yet.\nGo to Settings > Goal Page\nto set some!" :"I will get\n\(info.Goals[Goalindx][0])\nfor \(info.Goals[Goalindx][1])")
-                            .font(.system(size: info.Goals == [] ? 20 : 20))
+                        Text(info.info_object.Goals == [] ? "You dont have any goals yet.\nGo to Settings > Goal Page\nto set some!" :"I will get\n\(info.info_object.Goals[Goalindx][0])\nfor \(info.info_object.Goals[Goalindx][1])")
+                            .font(.system(size: info.info_object.Goals == [] ? 20 : 20))
                             .foregroundStyle(.white)
                             .offset(y: 50)
                     }
@@ -430,5 +430,5 @@ struct Home: View {
 
 
 #Preview {
-    Home(info: .constant(data(Age: 0, Gender: false, prev: [], targ: [], schedule: [], NAPFA_Date: Date.now, Goals: [])), homeSelectedTimed: .constant([]), homeSelectedDays: .constant([]))
+    Home(info: dataViewModel(), homeSelectedTimed: .constant([]), homeSelectedDays: .constant([]))
 }

@@ -11,7 +11,8 @@ struct Scheduling_: View {
     @Environment(\.dismiss) private var dismiss
     
     @Binding var start: Bool
-    @Binding var info: data
+    //@Binding var info: data
+    @StateObject var info: dataViewModel
     @State private var Days = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
     
     @State private var toThrow: String = ""
@@ -42,7 +43,7 @@ struct Scheduling_: View {
             DatePicker("Select your Napha Date", selection: $NAPFA_Date, in: Date.now..., displayedComponents: .date)
                 .padding(.horizontal, 50)
                 .onChange(of: NAPFA_Date){
-                    info.NAPFA_Date = NAPFA_Date
+                    info.info_object.NAPFA_Date = NAPFA_Date
                     UserDefaults.standard.setValue(NAPFA_Date, forKey: "NAPFA_Date")
                 }
             
@@ -138,7 +139,7 @@ struct Scheduling_: View {
         .onAppear{
             if let storedNAPFA_Date = UserDefaults.standard.object(forKey: "NAPFA_Date") as? Date{
                 NAPFA_Date = storedNAPFA_Date
-                info.NAPFA_Date = NAPFA_Date
+                info.info_object.NAPFA_Date = NAPFA_Date
             }
             
             if let storedST = UserDefaults.standard.object(forKey: "ST") as? [Date]{
@@ -157,5 +158,5 @@ struct Scheduling_: View {
     }
 }
 #Preview {
-    Scheduling_(start: .constant(false), info: .constant(data(Age: 0, Gender: false, prev: [], targ: [], schedule: [], NAPFA_Date: Date.now, Goals: [])), selectedDays: .constant([]), selectedTimes: .constant([]), schedSheet: .constant(false))
+    Scheduling_(start: .constant(false), info: dataViewModel(), selectedDays: .constant([]), selectedTimes: .constant([]), schedSheet: .constant(false))
 }
